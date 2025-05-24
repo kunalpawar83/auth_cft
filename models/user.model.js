@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
@@ -6,17 +7,27 @@ const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
+      required: [true, "A user must have first name"],
+      lowercase: true,
+      minlength: [3, "First name must be at least 3 characters"],
     },
     lastName: {
       type: String,
+      required: [true, "A user must have last name"],
+      lowercase: true,
+      minlength: [3, "Last name must be at least 3 characters"],
     },
     email: {
       type: String,
-      required: true,
-      unqiue: true,
+      required: [true, "A user must have email"],
+      unique: true,
+      lowercase: true,
+      validate: [validator.isEmail, "Please provide valid email"],
     },
     password: {
       type: String,
+      required: [true, " A user must have password"],
+      minlength: [8, "Password must be at least 8 characters"],
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
